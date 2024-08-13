@@ -1,0 +1,33 @@
+{# 继承页面 #}
+{% extends '基础页面.html' %}
+{# 页面样式 #}
+{% block style %}
+  <style>
+      form div {
+          margin-top: 10px;
+      }
+  </style>
+{% endblock %}
+{# 这里是页面的内容 #}
+{% block content %}
+  <h4>登录</h4>
+  <p>{{ 游戏名称 }} - {{ 游戏副标题 }}</p>
+  <form style="max-width: 220px">
+    <div>
+      <label
+      >账号:
+        <input name="username" type="text" required/>
+      </label>
+    </div>
+    <div>
+      <label
+      >密码:
+        <input name="password" type="password" required/>
+      </label>
+    </div>
+    <div style="text-align: center">
+      <input type="submit" value="登录"/>
+      <input type="button" value="注册"/>
+    </div>
+  </form>
+{% endblock %}

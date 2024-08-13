@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+"""
+管理文件，用来管理游戏
+"""
+from command.main import main
+
+if __name__ == "__main__":
+    main()
