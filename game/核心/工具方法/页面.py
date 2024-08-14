@@ -16,7 +16,7 @@ class 跳转页面标志(Exception):
 
     def __init__(self, _页面: Type[页面基类] | 文本类型, _页面参数: 字典类型):
         self._页面 = _页面
-        self._页面参数 = _页面
+        self._页面参数 = _页面参数
 
     def 页面路径(self):
         _页面 = 文本(self._页面)
