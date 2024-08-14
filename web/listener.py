@@ -1,4 +1,6 @@
 # sanic app 初始化的一些监听
+import asyncio
+
 from sanic import Sanic
 
 from common.log import logger
@@ -13,6 +15,7 @@ def load_game_data():
 
 
 async def before_server_start(app):
+
     await init_db()
     load_game_data()
 

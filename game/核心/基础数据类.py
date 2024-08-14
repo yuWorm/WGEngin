@@ -57,6 +57,13 @@ class 文本(str):
         """
         return self.endswith(_文本)
 
+    def 去空(self):
+        """
+        去除开头和结尾的空字符,如空格换行等
+        :return:
+        """
+        return self.strip()
+
 
 class 元组(tuple):
     pass

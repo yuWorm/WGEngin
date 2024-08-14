@@ -1,9 +1,12 @@
 import contextvars
 import functools
 import time
-from typing import Any
+from types import SimpleNamespace
+from typing import Any, Type
 
 from sanic.request import Request
+
+from database.models.user import User
 
 
 def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
@@ -33,6 +36,7 @@ def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
 
 class GlobalData:
     _data: dict[str, Any]
+    用户: User
 
     def __init__(self):
         self._data = {}
@@ -62,13 +66,17 @@ class GlobalData:
         del self.data[index]
 
 
+class CustomRequestCtx(SimpleNamespace):
+    g: GlobalData
+
+
+class CustomRequest(Request):
+    ctx: CustomRequestCtx
+
+
 # 用于游戏的全局请求上下文设置
 request_var = contextvars.ContextVar("request")
-r: Request = bind_context_var(request_var)
-
-# 用于游戏的全局数据上下文设置
-globals_var = contextvars.ContextVar("globals")
-g: GlobalData = bind_context_var(globals_var)
+r: Type[CustomRequest] = bind_context_var(request_var)
 
 
 def context_bind(func):
@@ -76,13 +84,12 @@ def context_bind(func):
     async def wrapper(req: Request, *args, **kwargs):
         start_time = time.time()
         # 注册全局上下文
+        req.ctx.g = GlobalData()
         request_var_token = request_var.set(req)
-        global_var_token = globals_var.set(GlobalData())
-        g.start_time = start_time
+        req.ctx.g.start_time = start_time
         resp = await func(r, *args, **kwargs)
         # 注销全局上下文，主要供给游戏使用
         request_var.reset(request_var_token)
-        globals_var.reset(global_var_token)
         return resp
 
     return wrapper

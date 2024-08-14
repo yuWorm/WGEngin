@@ -22,8 +22,6 @@ class UserGroup(BaseTable):
 
 
 class User(BaseTable):
-    id = fields.IntField(pk=True, description="用户ID")
-    uid = fields.IntField(unique=True, description="用户唯一ID，如100001")
     username = fields.CharField(
         unique=True, max_length=20, description="用户名，用于登录"
     )

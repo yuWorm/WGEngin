@@ -15,3 +15,6 @@ from abc import ABC, abstractmethod, abstractproperty
 数据类型 = type
 
 基础异常 = Exception
+
+
+获取数据长度 = len

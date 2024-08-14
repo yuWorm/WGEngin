@@ -2,13 +2,14 @@ import time
 from abc import ABC, abstractmethod
 from typing import Any, Type
 
-from common.context import g, r
+from common.context import r
 from config.setting import settings
 from sanic.response import HTTPResponse
 from jinja2 import Template, Environment, FileSystemLoader
-from game.核心.基础异常 import 页面模板不存在
+from game.核心.基础异常 import 页面模板不存在, 类型检测异常
 from game.核心.基础数据类 import 字典
-from game.核心.基础数据类型 import 空, 文本类型, 否, 字典类型, 是或否, 列表类型
+from game.核心.基础数据类型 import 空, 文本类型, 否, 字典类型, 是或否, 列表类型, 是
+from game.核心.基础方法 import 校验数据类型
 from game.核心.基类.元类 import 固定属性元类
 from game.核心.基类.数据类 import 基础数据结构
 from game.核心.工具方法 import 文件
@@ -40,14 +41,17 @@ class 页面参数基类(基础数据结构):
 class 页面基类(ABC, metaclass=固定属性元类):
     页面模板: Template = 空
     页面组: 文本类型
-    页面参数: Type[页面参数基类]
-
-    参数: 页面参数基类
 
     # 用于将当前页面模板注入的全局的模板路径当中
     是否注入全局模版路径: 是或否 = 否
 
-    __需要的属性 = ["页面组", "页面参数"]
+    需要的属性 = ["页面组"]
+
+    页面参数类: Type[页面参数基类] = None
+    页面参数: 页面参数基类
+
+    # 这个是页面的通过加密链接传入的参数, 用于构建返回上一页之类的
+    _页面参数 = {}
 
     def __new__(cls, *args, **kwargs):
         if cls.是否注入全局模版路径:
@@ -58,9 +62,11 @@ class 页面基类(ABC, metaclass=固定属性元类):
 
         return super().__new__(cls)
 
-    def __init__(self, _页面参数):
+    def __init__(self, _页面参数: 字典类型, _请求参数: 字典类型):
         self.加载页面模板()
-        # self.解析页面参数(_页面参数)
+        self._页面参数 = _页面参数
+        _请求参数.update(_页面参数)
+        self.解析页面参数(字典(_请求参数))
 
     @classmethod
     def 页面名称(cls):
@@ -88,6 +94,8 @@ class 页面基类(ABC, metaclass=固定属性元类):
     async def 渲染页面(self):
         _基础数据 = await self.基础页面数据()
         _页面数据 = await self.页面数据()
+        if not _页面数据:
+            _页面数据 = {}
         _基础数据.更新(_页面数据)
         _渲染结果 = self.页面模板.render(**_基础数据)
         _请求头 = self.页面返回请求头()
@@ -106,18 +114,26 @@ class 页面基类(ABC, metaclass=固定属性元类):
                 "游戏副标题": 游戏副标题,
                 "游戏介绍": 游戏介绍,
                 "页面消息": cls.获取页面消息,
+                "是否登录": r.ctx.g.是否登录,
                 "isDev": settings.DEBUG,
             }
         )
 
+        if r.ctx.g.是否登录:
+            _数据["用户"] = {"用户名": r.ctx.g.用户.username, "用户ID": r.ctx.g.用户.id}
+
         if settings.DEBUG:
             _数据["round"] = round
-            _数据["g"] = g
+            _数据["g"] = r.ctx.g
             _数据["end_time"] = 当前时间_单位秒
         return _数据
 
     @abstractmethod
     async def 页面数据(self) -> 字典类型:
+        """
+        用于渲染页面数据
+        :return:
+        """
         pass
 
     async def 加载数据(self):
@@ -154,5 +170,41 @@ class 页面基类(ABC, metaclass=固定属性元类):
         """
         添加页面消息(_内容, _分类)
 
+    def 处理页面数据(self):
+        pass
+
     def 解析页面参数(self, _参数: 字典类型):
-        self.参数 = self.页面参数(**_参数)
+        from game.核心.工具方法.页面 import 跳转到错误页面, 获取页面路径
+
+        if self.页面参数类:
+            try:
+                self.页面参数 = self.页面参数类(**_参数)
+            except 类型检测异常 as e:
+                _返回上一页 = 获取页面路径(self.__class__, self._页面参数)
+                跳转到错误页面(str(e), {"back": _返回上一页})
+
+    # def 解析页面参数(self, _参数: 字典类型):
+    #     _参数类型列表 = self.__annotations__
+    #     _需要的参数 = 字典({})
+    #
+    #     for _必填的参数 in self.必填的参数:
+    #         if _必填的参数 not in _参数 or not _参数.取出(_必填的参数):
+    #             raise 类型检测异常(f"{_必填的参数}的值不可为空")
+    #
+    #     for _名称, _类型 in self.__annotations__.items():
+    #         if _名称 in _参数.键():
+    #             _值 = _参数.取出(_名称)
+    #             if not 校验数据类型(_值, _类型):
+    #                 raise 类型检测异常(f"{_名称}的值必须为{_类型}")
+    #             _需要的参数[_名称] = _值
+    #     return _需要的参数
+    #
+    # def 绑定页面参数(self, _参数: 字典类型):
+    #     if type(_参数) is dict:
+    #         _参数 = 字典(_参数)
+    #
+    #     for _名称, _值 in _参数.键值对():
+    #         self.__setattr__(_名称, _值)
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)

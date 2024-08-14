@@ -12,22 +12,27 @@
 {% block content %}
   <h4>登录</h4>
   <p>{{ 游戏名称 }} - {{ 游戏副标题 }}</p>
-  <form style="max-width: 220px">
+
+  {% for m in 异常信息 %}
+    <p style="color:red">{{ m }}</p>
+  {% endfor %}
+
+  <form style="max-width: 220px" action="" method="post">
     <div>
       <label
       >账号:
-        <input name="username" type="text" required/>
+        <input name="用户名" type="text" required/>
       </label>
     </div>
     <div>
       <label
       >密码:
-        <input name="password" type="password" required/>
+        <input name="密码" type="password" required/>
       </label>
     </div>
     <div style="text-align: center">
       <input type="submit" value="登录"/>
-      <input type="button" value="注册"/>
+      <a href="{{ 注册地址 }}"><input type="button" value="前往注册"></a>
     </div>
   </form>
 {% endblock %}

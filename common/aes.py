@@ -17,6 +17,9 @@ def generate_aes_key():
     if len(key) < 32:
         return key + "a" * (32 - len(key))
 
+    if len(key) == 32:
+        return key
+
     return key[:32]
 
 
@@ -27,6 +30,9 @@ def pad_base64(data):
     missing_padding = len(data) % 4
     if missing_padding:
         data += "=" * (4 - missing_padding)
+
+    data = data.replace(" ", "+")
+
     return data
 
 

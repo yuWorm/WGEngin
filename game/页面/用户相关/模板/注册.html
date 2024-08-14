@@ -12,34 +12,43 @@
 {% block content %}
   <h4>注册</h4>
   <p>{{ 游戏名称 }} - {{ 游戏副标题 }}</p>
-  <form style="max-width: 220px">
+
+  {% for m in 异常信息 %}
+    <p style="color:red">{{ m }}</p>
+  {% endfor %}
+  {% for m in 成功信息 %}
+    <p style="color:green">{{ m }}</p>
+  {% endfor %}
+
+  <form style="max-width: 240px" method="post" action="">
     <div>
       <label
       >账号:
-        <input name="username" type="text" required/>
+        <input name="用户名" type="text" required/>
       </label>
     </div>
         <div>
       <label
       >邮箱:
-        <input name="username" type="email" required/>
+        <input name="邮箱" type="email" required/>
       </label>
     </div>
     <div>
       <label
       >密码:
-        <input name="password" type="password" required/>
+        <input name="密码" type="password" required/>
       </label>
     </div>
     <div>
       <label
       >确认密码:
-        <input name="password" type="password" required/>
+        <input name="确认密码" type="password" required/>
       </label>
     </div>
     <div style="text-align: center">
-      <input type="submit" value="登录"/>
-      <input type="button" value="注册"/>
+      <input type="submit" value="注册"/>
+      <a href="{{ 登录地址 }}"><input type="button" value="前往登录"></a>
+
     </div>
   </form>
 {% endblock %}
