@@ -32,7 +32,7 @@ async def page(request: Request):
 
     # 登录校验
     if page_name not in 页面配置.不需要登录的页面:
-        if not r.ctx.g.用户:
+        if not r.ctx.g.是否登录:
             _登录页面路径 = 页面.获取页面路径(页面配置.登录页面)
             return 页面.重定向页面(_登录页面路径)
 

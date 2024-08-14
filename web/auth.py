@@ -8,7 +8,6 @@ def user_info(func):
     @functools.wraps(func)
     async def wrapper(request: Request, *args, **kwargs):
         user_id = request.ctx.session.get("user_id")
-        user = None
         if user_id:
             user = await User.filter(id=user_id).first()
             if not user:

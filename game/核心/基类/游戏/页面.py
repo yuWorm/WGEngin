@@ -2,6 +2,8 @@ import time
 from abc import ABC, abstractmethod
 from typing import Any, Type
 
+from sanic import text
+
 from common.context import r
 from config.setting import settings
 from sanic.response import HTTPResponse
@@ -52,6 +54,7 @@ class 页面基类(ABC, metaclass=固定属性元类):
 
     # 这个是页面的通过加密链接传入的参数, 用于构建返回上一页之类的
     _页面参数 = {}
+    无输出页面: 是或否 = 否
 
     def __new__(cls, *args, **kwargs):
         if cls.是否注入全局模版路径:
@@ -80,6 +83,9 @@ class 页面基类(ABC, metaclass=固定属性元类):
 
     @classmethod
     def 加载页面模板(cls):
+        if cls.无输出页面:
+            return
+
         # debug 默认每次都加载，这样修改了模板内容才会及时显示
         if settings.DEBUG:
             cls.页面模板 = _从文件中加载页面模板(cls.页面模板路径(), cls.__name__)
@@ -92,10 +98,16 @@ class 页面基类(ABC, metaclass=固定属性元类):
         return 空
 
     async def 渲染页面(self):
-        _基础数据 = await self.基础页面数据()
+
         _页面数据 = await self.页面数据()
         if not _页面数据:
             _页面数据 = {}
+
+        if self.无输出页面:
+            return text("")
+
+        _基础数据 = await self.基础页面数据()
+
         _基础数据.更新(_页面数据)
         _渲染结果 = self.页面模板.render(**_基础数据)
         _请求头 = self.页面返回请求头()

@@ -73,7 +73,7 @@ class User(BaseTable):
         return await cls.create(
             username=username,
             email=email,
-            password=password,
+            password=cls.make_password(password),
             is_staff=is_staff,
             is_superuser=is_superuser,
             group=group,

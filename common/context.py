@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from typing import Any, Type
 
 from sanic.request import Request
+from sanic_session import Session
 
 from database.models.user import User
 
@@ -37,6 +38,7 @@ def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
 class GlobalData:
     _data: dict[str, Any]
     用户: User
+    是否登录: bool
 
     def __init__(self):
         self._data = {}
@@ -68,6 +70,7 @@ class GlobalData:
 
 class CustomRequestCtx(SimpleNamespace):
     g: GlobalData
+    session: dict
 
 
 class CustomRequest(Request):
