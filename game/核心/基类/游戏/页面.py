@@ -65,11 +65,10 @@ class 页面基类(ABC, metaclass=固定属性元类):
 
         return super().__new__(cls)
 
-    def __init__(self, _页面参数: 字典类型, _请求参数: 字典类型):
+    def __init__(
+        self,
+    ):
         self.加载页面模板()
-        self._页面参数 = _页面参数
-        _请求参数.update(_页面参数)
-        self.解析页面参数(字典(_请求参数))
 
     @classmethod
     def 页面名称(cls):
@@ -148,8 +147,14 @@ class 页面基类(ABC, metaclass=固定属性元类):
         """
         pass
 
-    async def 加载数据(self):
-        pass
+    async def 加载数据(self, _页面参数: 字典类型, _请求参数: 字典类型):
+        """
+        调用加载数据
+        :return:
+        """
+        self._页面参数 = _页面参数
+        _请求参数.update(_页面参数)
+        self.解析页面参数(字典(_请求参数))
 
     @classmethod
     def 获取页面消息(
@@ -181,9 +186,6 @@ class 页面基类(ABC, metaclass=固定属性元类):
         :return:
         """
         添加页面消息(_内容, _分类)
-
-    def 处理页面数据(self):
-        pass
 
     def 解析页面参数(self, _参数: 字典类型):
         from game.核心.工具方法.页面 import 跳转到错误页面, 获取页面路径

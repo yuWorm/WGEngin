@@ -43,9 +43,7 @@ class GlobalData:
     def __init__(self):
         self._data = {}
 
-    def __getattribute__(self, name):
-        if name.startswith("_"):
-            return super().__getattribute__(name)
+    def __getattr__(self, name):
         return self._data.get(name)
 
     def __setattr__(self, name, value):

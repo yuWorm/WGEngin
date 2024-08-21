@@ -5,6 +5,7 @@ from sanic import Sanic
 
 from common.log import logger
 from database.conf import init_db, close_db
+from database.mongo import client
 
 
 def load_game_data():
@@ -15,7 +16,7 @@ def load_game_data():
 
 
 async def before_server_start(app):
-
+    client.connect()
     await init_db()
     load_game_data()
 

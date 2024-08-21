@@ -49,6 +49,13 @@ class Settings(BaseSettings):
     REDIS_DATABASE: int
     REDIS_TIMEOUT: int = 5
 
+    # mongodb 配置
+    MONGO_HOST: str = "127.0.0.1"
+    MONGO_PORT: int = 27017
+    MONGO_USER: str
+    MONGO_PASSWORD: str
+    MONGO_DATABASE: str = "wgengine"
+
     # JWT Token 相关配置
     TOKEN_SECRET_KEY: str  # 登录token的加密秘钥
     TOKEN_ALGORITHM: str = "HS256"  # 算法
