@@ -17,6 +17,10 @@ class MongoClient:
             mongo_uri, serverSelectionTimeoutMS=10000, minPoolSize=10, maxPoolSize=50
         )[settings.MONGO_DATABASE]
 
+    def disconnect(self):
+        if self.client is not None:
+            pass
+
     def get_client(self):
         if self.client is None:
             self.connect()

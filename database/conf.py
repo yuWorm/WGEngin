@@ -19,7 +19,7 @@ db_conf = {
             "models": [
                 "database.base",
                 "aerich.models",
-                "game.db.models",
+                # "game.db.models",
             ],  # 替换为你自己的模型模块路径
             "default_connection": "default",
         }

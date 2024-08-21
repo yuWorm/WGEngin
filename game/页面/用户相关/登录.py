@@ -5,7 +5,8 @@ from game.核心.基础异常 import 类型检测异常
 from game.核心.基础数据类 import 字典, 列表, 文本
 from game.核心.基础数据类型 import 字典类型, 文本类型
 from game.核心.基类.游戏.页面 import 页面基类, 页面参数基类
-from game.核心.工具方法 import 用户, 页面
+from game.核心.工具方法 import 页面
+from game.核心.基类.游戏.用户 import 用户类
 from game.核心.数据.注册游戏元素 import 添加页面
 from game.页面 import 页面配置
 
@@ -22,8 +23,8 @@ class 登录(页面基类):
     页面参数类 = 登录信息
     页面参数: 登录信息
 
-    def __init__(self, _页面参数: 字典类型, _请求参数: 字典类型):
-        super().__init__(_页面参数, _请求参数)
+    def __init__(self):
+        super().__init__()
         self._异常信息 = 列表([])
 
     def 解析页面参数(self, _参数: 字典类型):
@@ -46,12 +47,12 @@ class 登录(页面基类):
         if 获取数据长度(self._异常信息) > 0:
             return
 
-        _用户 = await 用户.通过用户名获取用户(self.页面参数.用户名)
+        _用户 = await 用户类.通过用户名获取用户(self.页面参数.用户名)
         if not _用户:
             self._异常信息.添加("用户名或密码错误")
             return
 
-        if not 用户.校验用户密码是否正确(_用户, self.页面参数.密码):
+        if not _用户.校验密码(self.页面参数.密码):
             self._异常信息.添加("用户名或密码错误")
             return
 

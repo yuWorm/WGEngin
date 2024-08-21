@@ -5,8 +5,9 @@ from game.核心.基础属性 import 获取数据长度
 from game.核心.基础异常 import 类型检测异常
 from game.核心.基础数据类 import 列表, 文本, 字典
 from game.核心.基础数据类型 import 字典类型, 文本类型, 列表类型
+from game.核心.基类.游戏.用户 import 用户类
 from game.核心.基类.游戏.页面 import 页面基类, 页面参数基类
-from game.核心.工具方法 import 页面, 用户
+from game.核心.工具方法 import 页面
 from game.核心.工具方法.数据 import 判断是否为纯文本或数字
 from game.核心.数据.注册游戏元素 import 添加页面
 from game.页面 import 页面配置
@@ -95,8 +96,8 @@ class 注册(页面基类):
     _异常信息: 列表类型
     _成功信息: 列表类型
 
-    def __init__(self, _页面参数: 字典类型, _请求参数: 字典类型):
-        super().__init__(_页面参数, _请求参数)
+    def __init__(self):
+        super().__init__()
         self._异常信息 = 列表([])
         self._成功信息 = 列表([])
 
@@ -121,26 +122,26 @@ class 注册(页面基类):
             self._异常信息.添加("两次输入密码不一致")
             return
 
-        _用户 = await 用户.通过用户名获取用户(self.页面参数.用户名)
+        _用户 = await 用户类.通过用户名获取用户(self.页面参数.用户名)
         if _用户:
             self._异常信息.添加("用户名已被占用, 请重新输入")
             return
 
-        _用户 = await 用户.通过邮箱获取用户(_邮箱=self.页面参数.邮箱)
+        _用户 = await 用户类.通过邮箱获取用户(_邮箱=self.页面参数.邮箱)
         if _用户:
             self._异常信息.添加(
                 "该邮箱已注册过账号,您是否忘记了密码,请前往找回,请重新输入"
             )
             return
 
-        _用户 = await 用户.注册用户(
+        _用户 = await 用户类.注册(
             self.页面参数.用户名, self.页面参数.密码, self.页面参数.邮箱
         )
         if not _用户:
             self._异常信息.添加("注册失败,请联系管理团队")
             return
 
-        self._成功信息.添加(f"{_用户.username}注册成功, 请前往登录")
+        self._成功信息.添加(f"{_用户.用户名}注册成功, 请前往登录")
 
     async def 页面数据(self) -> 字典类型:
         await self.注册逻辑处理()

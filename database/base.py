@@ -8,7 +8,7 @@ from .models.pet import Pet, PetSkill
 from .models.bag import Bag, BagItem
 from .models.chat import PrivateChat, PublicChat
 from .models.organize import Organize, OrganizeMember, OrganizeApply
-from game.db.rewirte import *
+
 
 __all__ = [
     "User",

@@ -5,9 +5,6 @@ from types import SimpleNamespace
 from typing import Any, Type
 
 from sanic.request import Request
-from sanic_session import Session
-
-from database.models.user import User
 
 
 def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
@@ -33,6 +30,11 @@ def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
             del context.get()[index]
 
     return ContextVarBind()
+
+
+class User:
+    用户名: str
+    用户ID: int
 
 
 class GlobalData:
@@ -79,6 +81,9 @@ class CustomRequest(Request):
 request_var = contextvars.ContextVar("request")
 r: Type[CustomRequest] = bind_context_var(request_var)
 
+global_var = contextvars.ContextVar("global")
+g: GlobalData = bind_context_var(global_var)
+
 
 def context_bind(func):
     @functools.wraps(func)
@@ -87,10 +92,13 @@ def context_bind(func):
         # 注册全局上下文
         req.ctx.g = GlobalData()
         request_var_token = request_var.set(req)
+        global_var_token = global_var.set(GlobalData())
+        g.start_time = start_time
         req.ctx.g.start_time = start_time
         resp = await func(r, *args, **kwargs)
         # 注销全局上下文，主要供给游戏使用
         request_var.reset(request_var_token)
+        global_var.reset(global_var_token)
         return resp
 
     return wrapper

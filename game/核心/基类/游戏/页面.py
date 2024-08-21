@@ -4,7 +4,7 @@ from typing import Any, Type
 
 from sanic import text
 
-from common.context import r
+from common.context import r, g
 from config.setting import settings
 from sanic.response import HTTPResponse
 from jinja2 import Template, Environment, FileSystemLoader
@@ -65,9 +65,7 @@ class 页面基类(ABC, metaclass=固定属性元类):
 
         return super().__new__(cls)
 
-    def __init__(
-        self,
-    ):
+    def __init__(self):
         self.加载页面模板()
 
     @classmethod
@@ -125,17 +123,17 @@ class 页面基类(ABC, metaclass=固定属性元类):
                 "游戏副标题": 游戏副标题,
                 "游戏介绍": 游戏介绍,
                 "页面消息": cls.获取页面消息,
-                "是否登录": r.ctx.g.是否登录,
+                "是否登录": g.是否登录,
                 "isDev": settings.DEBUG,
             }
         )
 
-        if r.ctx.g.是否登录:
-            _数据["用户"] = {"用户名": r.ctx.g.用户.username, "用户ID": r.ctx.g.用户.id}
+        if g.是否登录:
+            _数据["用户"] = {"用户名": g.用户.用户名, "用户ID": g.用户.id}
 
         if settings.DEBUG:
             _数据["round"] = round
-            _数据["g"] = r.ctx.g
+            _数据["g"] = g
             _数据["end_time"] = 当前时间_单位秒
         return _数据
 

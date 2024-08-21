@@ -73,8 +73,8 @@ class 字典(dict):
     def 取出(self, _键名: _文本类型, _默认值: _任意值 = _空):
         return self.get(_键名, _默认值)
 
-    def 弹出(self):
-        pass
+    def 弹出(self, _键名: _文本类型):
+        return self.pop(_键名)
 
     def 更新(self, __新字典: _字典类型):
         """
