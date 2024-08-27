@@ -1,7 +1,7 @@
 from common.context import r
 from common.log import logger
 from game.核心.基础属性 import 获取数据长度
-from game.核心.基础异常 import 类型检测异常
+from game.核心.基础异常 import 类型检测异常, 类参数异常
 from game.核心.基础数据类 import 字典, 列表, 文本
 from game.核心.基础数据类型 import 字典类型, 文本类型
 from game.核心.基类.游戏.页面 import 页面基类, 页面参数基类
@@ -39,7 +39,7 @@ class 登录(页面基类):
             return
         try:
             self.页面参数 = self.页面参数类(**_参数)
-        except 类型检测异常 as e:
+        except (类型检测异常, 类参数异常) as e:
             self._异常信息.添加(文本(e))
 
     async def 登录逻辑处理(self):
