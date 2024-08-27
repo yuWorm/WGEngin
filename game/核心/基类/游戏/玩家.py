@@ -4,6 +4,7 @@ from typing import TypeVar
 from game.核心.基础数据类 import 列表
 from game.核心.基础数据类型 import 文本类型, 整数类型, 小数类型, 字典类型, 是或否
 from game.核心.基类.元类 import 固定属性元类
+from game.核心.基类.数据库映射 import 数据库映射类
 from game.核心.数据模板 import 技能
 
 T = TypeVar("T")
@@ -19,9 +20,14 @@ class 玩家资源类:
     pass
 
 
-class 玩家基类(ABC, metaclass=固定属性元类):
-    用户ID: 整数类型
-    ID: 整数类型
+class 玩家类(ABC, 数据库映射类, metaclass=固定属性元类):
+    """
+    玩家基类, 属性命名规则, 所有不需要保存到数据库中的数据都不需要使用_开头, 需要保存的数据不可以用_开头, 并且必须指定类型注释
+    """
+
+    _表名 = "玩家表"
+
+    用户ID: 文本类型
     昵称: 文本类型
     头像: 文本类型
     职业: 文本类型
@@ -47,9 +53,9 @@ class 玩家基类(ABC, metaclass=固定属性元类):
         super().__init_subclass__(**kwargs)
 
     def __init__(self, **kwargs):
-        pass
+        super().__init__()
 
-    async def 加载玩家数据(self):
+    async def 加载玩家数据(self, _玩家ID):
         pass
 
     async def 从缓存中加载玩家数据(self):

@@ -22,7 +22,7 @@ class TestPage(unittest.TestCase):
             page.段落.标签("密码:").输入框(类型="文本")
             page.段落.输入框(类型="提交", 值="注册")
         page.模板_页头.JS脚本(资源="/test.js")
-        print(page)
+        print(page.渲染())
 
     def test_html_tagger(self):
         doc = Document(

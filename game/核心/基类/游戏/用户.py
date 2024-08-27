@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 
 from config.setting import settings
+from game.核心.基础数据类 import 字典
 from game.核心.基础数据类型 import 文本类型, 是或否
 from game.核心.基类.数据库映射 import 数据库映射类
 from game.核心.工具方法.数据库 import 数据库工具
@@ -20,9 +21,9 @@ class 用户类(数据库映射类):
     @classmethod
     async def 注册(cls, _用户名: 文本类型, _密码: 文本类型, _邮箱: 文本类型):
         _用户数据 = {"用户名": _用户名, "邮箱": _邮箱, "密码": cls.对密码加密(_密码)}
-        _添加结果 = await 数据库工具[cls._表名].插入一条数据(_用户数据)
+        _添加结果 = await 数据库工具[cls._表名].添加一条数据(_用户数据)
         _用户 = cls()
-        _用户.解析数据(_用户数据)
+        _用户.解析数据(字典(_用户数据))
         return _用户
 
     @classmethod

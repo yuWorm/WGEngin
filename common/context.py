@@ -34,7 +34,7 @@ def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
 
 class User:
     用户名: str
-    用户ID: int
+    用户ID: str
 
 
 class GlobalData:

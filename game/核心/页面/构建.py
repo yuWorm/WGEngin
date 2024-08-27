@@ -46,7 +46,7 @@ class 页面构建类:
             raise Exception("异常数据")
 
         if name[0] == "_":
-            return self.__getattr__(name)
+            return object.__getattribute__(self, name)
 
         # 模板都是以_结尾
         if name.startswith("模板_"):
@@ -156,7 +156,7 @@ class 页面构建类:
         self._关闭标签()
         self._页面内容.append(self._标签栈.pop())
 
-    def _添加注释(self, _内容):
+    def 添加注释(self, _内容):
         """
         添加注释内容
         :param _内容:
@@ -166,28 +166,28 @@ class 页面构建类:
         self._页面内容.append(f"<!--{_内容}-->")
         return self
 
-    def _添加JS(self, _代码: str, **attrs):
+    def 添加JS(self, _代码: str, **attrs):
         """
         添加js脚本
-        :param code:
+        :param _代码:
         :param attrs:
         :return:
         """
         self._关闭标签()
         _代码 = 转义特殊标签(JS脚本关闭标签, _代码)
-        self._pieces.append(f"<script{解析标签参数(attrs)}>{_代码}</script>")
+        self._页面内容.append(f"<script{解析标签参数(attrs)}>{_代码}</script>")
         return self
 
-    def _添加样式(self, _代码: str, **attrs):
+    def 添加样式(self, _代码: str, **attrs):
         """
 
-        :param code:
+        :param _代码:
         :param attrs:
         :return:
         """
         self._关闭标签()
         _代码 = 转义特殊标签(CSS样式关闭标签, _代码)
-        self._pieces.append(f"<style{解析标签参数(attrs)}>{_代码}</style>")
+        self._页面内容.append(f"<style{解析标签参数(attrs)}>{_代码}</style>")
         return self
 
 

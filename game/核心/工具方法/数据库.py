@@ -19,14 +19,14 @@ class 数据库操作类:
             数据库连接 = client.get_client()
         self._数据库连接 = 数据库连接[self.表名]
 
-    async def 插入一条数据(self, _数据: 字典类型):
+    async def 添加一条数据(self, _数据: 字典类型):
         return await self._数据库连接.insert_one(_数据)
 
-    async def 插入多条数据(self, _多条数据: 列表[字典类型]):
+    async def 添加多条数据(self, _多条数据: 列表[字典类型]):
         return await self._数据库连接.insert_many(_多条数据)
 
     async def 查询一条数据(self, _查询条件: 字典类型) -> 字典 | None:
-        _查询结果 = await self._数据库连接.find_one(_查询条件)
+        _查询结果: dict = await self._数据库连接.find_one(_查询条件)
         if _查询结果 is None:
             return _查询结果
         return 字典(_查询结果)
