@@ -27,6 +27,10 @@ WGEngine全称(Wap Game Engine), wap游戏引擎, 主要是为了方便简单的
     - [ ] 实现语法与特性
     - [ ] 实现与python完美互通
 
+### 致谢
+
+- [html5tagger](https://github.com/sanic-org/html5tagger) - 一个可以用python写html页面的工具,本框架的页面引擎就是直接修改的html5tagger
+
 ### 联系
 
 交流群(QQ): 946055169

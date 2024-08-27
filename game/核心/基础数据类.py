@@ -70,6 +70,13 @@ class 元组(tuple):
 
 
 class 字典(dict):
+
+    def __init__(self, _字典: _字典类型 | None = None, **kwargs):
+        if _字典:
+            super().__init__(_字典)
+        else:
+            super().__init__(kwargs)
+
     def 取出(self, _键名: _文本类型, _默认值: _任意值 = _空):
         return self.get(_键名, _默认值)
 

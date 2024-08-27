@@ -118,3 +118,7 @@ def 返回游戏页面路径():
 
 def 返回游戏首页地址():
     return "/"
+
+
+def 获取页面资源(_地址: 文本类型):
+    return f"/static/game/{_地址}"

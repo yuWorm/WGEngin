@@ -18,6 +18,7 @@ from game.核心.工具方法 import 文件
 from game.核心.工具方法.时间 import 当前时间_单位秒
 
 from game.核心.数据.路径 import 游戏页面文件夹, 游戏公共模板文件夹
+from game.核心.页面.构建 import 页面构建类
 from game.游戏配置 import 游戏名称, 游戏副标题, 游戏介绍
 
 模板加载器 = FileSystemLoader(
@@ -94,22 +95,30 @@ class 页面基类(ABC, metaclass=固定属性元类):
     def 页面返回请求头(self) -> 字典类型 | 空:
         return 空
 
+    @abstractmethod
+    async def 内容(self) -> 页面构建类:
+        pass
+
     async def 渲染页面(self):
+        from game.核心.工具方法.页面 import 获取页面资源
 
-        _页面数据 = await self.页面数据()
-        if not _页面数据:
-            _页面数据 = {}
+        _页面内容 = await self.内容()
 
-        if self.无输出页面:
+        if not _页面内容:
             return text("")
 
-        _基础数据 = await self.基础页面数据()
+        # 加入最基础的css和js
+        _页面内容.模板_页头.引入资源(
+            链接地址=获取页面资源("css/base.css"), rel="stylesheet", 类型="text/css"
+        )
+        _页面内容.模板_页头.JS脚本(资源=获取页面资源("js/clock.js"), defer=True)
 
-        _基础数据.更新(_页面数据)
-        _渲染结果 = self.页面模板.render(**_基础数据)
+        if settings.DEBUG:
+            _页面内容.段落(f"{round(time.time() * 1000 - g.start_time * 1000, 2)}毫秒")
+
         _请求头 = self.页面返回请求头()
         return HTTPResponse(
-            _渲染结果,
+            str(_页面内容),
             status=200,
             headers=_请求头,
             content_type="text/html; charset=utf-8",
@@ -137,7 +146,6 @@ class 页面基类(ABC, metaclass=固定属性元类):
             _数据["end_time"] = 当前时间_单位秒
         return _数据
 
-    @abstractmethod
     async def 页面数据(self) -> 字典类型:
         """
         用于渲染页面数据
