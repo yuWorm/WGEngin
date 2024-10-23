@@ -27,6 +27,34 @@ WGEngine全称(Wap Game Engine), wap游戏引擎, 主要是为了方便简单的
     - [ ] 实现语法与特性
     - [ ] 实现与python完美互通
 
+### 使用
+
+**注意:** 现在还在开发中,但是由于工作原因,进度很慢,且开发时间也不稳定,暂时还只是个架子,还需要比较久,无法正常使用的,大家当个乐子就行.
+
+#### 环境准备
+
+- python >= 3.11
+- mogodb
+- redis
+
+#### 修改配置
+
+```shell
+cp .env.example .env
+```
+
+然后修改.env中的信息为你本机的即可
+
+#### 运行
+
+```shell
+# 没有安装poetry请先安装poetry
+pip install poetry
+poetry install
+poetry shell
+python server.py
+```
+
 ### 致谢
 
 - [html5tagger](https://github.com/sanic-org/html5tagger) - 一个可以用python写html页面的工具,本框架的页面引擎就是直接修改的html5tagger

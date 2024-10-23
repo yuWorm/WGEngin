@@ -5,6 +5,7 @@ from game.核心.基础方法 import 校验数据类型
 from game.核心.基类.游戏.页面 import 页面基类, 页面参数基类
 from game.核心.数据.注册游戏元素 import 添加页面
 from game.核心.页面.构建 import 页面构建类, 创建页面
+from game.核心.基类.游戏.玩家 import 玩家类
 
 
 class 角色信息(页面参数基类):
@@ -52,8 +53,9 @@ class 创建角色(页面基类):
 
     async def 内容(self) -> 页面构建类 | None:
         # 如果请求为post, 执行创建操作
-        if r.method != "POST":
+        if r.method == "POST":
             _创建返回信息 = self.创建角色()
+
             if 校验数据类型(_创建返回信息, 是或否):
                 pass
         _页面 = 创建页面(f"{self.游戏名称}-创建角色")

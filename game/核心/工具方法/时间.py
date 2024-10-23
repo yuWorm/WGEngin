@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 
 def 当前时间_单位秒():
@@ -9,5 +10,9 @@ def 当前时间_单位秒():
     return time.time()
 
 
-def 当前日期():
-    pass
+def 当前时间():
+    """
+    返回当前的日期时间,并格式化为年-月-日 时:分:秒
+    :return:
+    """
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")

@@ -5,6 +5,7 @@ from game.核心.基础数据类 import 列表
 from game.核心.基础数据类型 import 文本类型, 整数类型, 小数类型, 字典类型, 是或否
 from game.核心.基类.元类 import 固定属性元类
 from game.核心.基类.数据库映射 import 数据库映射类
+from game.核心.工具方法.数据库 import 数据库工具
 from game.核心.数据模板 import 技能
 
 T = TypeVar("T")
@@ -55,6 +56,10 @@ class 玩家类(ABC, 数据库映射类, metaclass=固定属性元类):
     def __init__(self, **kwargs):
         super().__init__()
 
+    @classmethod
+    async def 设置数据库(cls):
+        await 数据库工具[cls._表名].设置索引({"邮箱": 1}, {"unique": True})
+
     async def 加载玩家数据(self, _玩家ID):
         pass
 
@@ -89,5 +94,10 @@ class 玩家类(ABC, 数据库映射类, metaclass=固定属性元类):
         pass
 
     @classmethod
-    async def 创建玩家(cls, _玩家昵称):
-        pass
+    async def 创建玩家(cls, _玩家昵称: 文本类型, _玩家性别: 文本类型):
+        """
+        床架一个玩家
+        :param _玩家昵称:
+        :param _玩家性别:
+        :return:
+        """

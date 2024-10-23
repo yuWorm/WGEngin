@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: str
     REDIS_DATABASE: int
     REDIS_TIMEOUT: int = 5
+    SESSION_EXPIRE_TIME: int = 60 * 60 * 2
 
     # mongodb 配置
     MONGO_HOST: str = "127.0.0.1"
