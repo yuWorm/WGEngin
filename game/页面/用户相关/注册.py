@@ -11,7 +11,7 @@ from game.核心.工具方法 import 页面
 from game.核心.工具方法.数据 import 判断是否为纯文本或数字
 from game.核心.数据.注册游戏元素 import 添加页面
 from game.核心.页面.构建 import 页面构建类, 创建页面
-from game.游戏配置 import 游戏名称, 游戏副标题
+
 from game.页面 import 页面配置
 
 
@@ -151,9 +151,9 @@ class 注册(页面基类):
 
     async def 内容(self) -> 页面构建类 | None:
         await self.注册逻辑处理()
-        _页面 = 创建页面(f"{游戏名称}-注册")
+        _页面 = 创建页面(f"{self.游戏名称}-注册")
 
-        _页面.四级标题(f"{游戏名称} - {游戏副标题}")
+        _页面.四级标题(f"{self.游戏名称} - {self.游戏副标题}")
         if self._异常信息:
             for _信息 in self._异常信息:
                 _页面.段落(_信息, 样式=字典(字体颜色="红色"))

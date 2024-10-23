@@ -33,6 +33,7 @@ def bind_context_var(context: contextvars.ContextVar) -> Any | Request:
 
 
 class User:
+    id: str
     用户名: str
     用户ID: str
 

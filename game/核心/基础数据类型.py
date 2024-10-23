@@ -1,3 +1,4 @@
+from types import UnionType
 from typing import NewType, Any, Type
 from game.核心.基础数据类 import 文本, 字典, 整数, 元组, 小数, 列表
 
@@ -7,7 +8,7 @@ from game.核心.基础数据类 import 文本, 字典, 整数, 元组, 小数, 
 否 = False
 是或否 = bool
 任意值 = NewType("任意值", Any)
-文本类型 = str | 文本
+文本类型: UnionType = str | 文本
 整数类型 = int | 整数
 小数类型 = float | 小数
 列表类型 = 列表 | list

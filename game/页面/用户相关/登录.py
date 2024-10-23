@@ -9,7 +9,6 @@ from game.核心.工具方法 import 页面
 from game.核心.基类.游戏.用户 import 用户类
 from game.核心.数据.注册游戏元素 import 添加页面
 from game.核心.页面.构建 import 创建页面
-from game.游戏配置 import 游戏名称, 游戏副标题
 from game.页面 import 页面配置
 
 
@@ -64,8 +63,8 @@ class 登录(页面基类):
     async def 内容(self):
         await self.登录逻辑处理()
 
-        _页面 = 创建页面(f"{游戏名称}-登录页面")
-        _页面.四级标题(f"{游戏名称} - {游戏副标题}")
+        _页面 = 创建页面(f"{self.游戏名称}-登录页面")
+        _页面.四级标题(f"{self.游戏名称} - {self.游戏副标题}")
         if self._异常信息:
             for _信息 in self._异常信息:
                 _页面.段落(_信息, 样式=字典(字体颜色="红色"))
